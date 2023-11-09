@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Transcriber</title>
+
+    <!-- Include Bootstrap CSS from a CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Audio Transcriber</h1>
+        <audio id="audio" controls></audio>
+        <div class="text-center">
+            <button id="record-button" class="btn btn-primary">Record</button>
+            <button id="transcribe-button" class="btn btn-success">Transcribe Audio</button>
+        </div>
+
+        <!-- Display the transcribed text or error message -->
+        <div id="transcription-result">
+            <!-- Loading Spinner -->
+            <div id="spinner" class="d-none text-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <p id="transcribed-text"></p>
+            <p id="summarized-text"></p>
+            <p id="error-message" class="text-danger"></p>
+        </div>
+    </div>
+
+    <!-- Include the necessary JavaScript libraries -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
