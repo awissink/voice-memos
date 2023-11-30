@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>transcribify your voice</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/"><i class="fa-solid fa-microphone"></i></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-item nav-link mr-3 mr-lg-5" href="/">home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-item nav-link mr-3 mr-lg-5" href="/record">transcribe</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-item nav-link mr-3 mr-lg-5" href="/about">about</a>
+        </li>
+      </ul>
+    </div>
+</nav>
+<div class="main-container">
+    <div class="transcription-box">
+        <p class="transcribe-label" style="font-family: 'DM Serif Display', serif;">record yourself speaking</p>
+<!--        <div class="container">-->
+            <audio id="audio" controls></audio>
+            <div class="text-center">
+                <button id="record-button" class="btn btn-primary">record</button>
+                <button id="transcribe-button" class="btn btn-success">transcribe</button>
+            </div>
+            <!-- Display the transcribed text or error message -->
+            <div id="transcription-result">
+                <!-- Loading Spinner -->
+                <div id="spinner" class="d-none text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div>
+                    <p id="transcribed-text" style="display: inline;"></p>
+                    <button id="copy-button" class="btn btn-secondary" style="display: none;">
+                        <i class="far fa-copy"></i>
+                    </button>
+                    <!-- Inline and initially hidden -->
+                </div>
+                <!--            <p id="summarized-text"></p>-->
+                <p id="error-message" class="text-danger"></p>
+                <!-- Social Media Share Buttons -->
+                <div class="social-share-buttons" style="display: none;">
+                    <button id="share-facebook" class="btn btn-social btn-facebook"><i class="fab fa-facebook-f"></i>
+                    </button>
+                    <button id="share-twitter" class="btn btn-social btn-twitter"><i class="fab fa-twitter"></i>
+                    </button>
+                    <button id="share-linkedin" class="btn btn-social btn-linkedin"><i class="fab fa-linkedin-in"></i>
+                    </button>
+                    <button id="share-email" class="btn btn-social btn-email"><i class="fas fa-envelope"></i></button>
+                    <button id="share-text" class="btn btn-social btn-text"><i class="fa-solid fa-message"></i></button>
+                </div>
+            </div>
+<!--        </div>-->
+    </div>
+</div>
+
+
+<!-- Include the necessary JavaScript libraries -->
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

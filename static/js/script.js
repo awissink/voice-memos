@@ -4,7 +4,7 @@ let recordedAudioBlob = null;
 
 const startRecording = () => {
     console.log("recording!");
-    document.querySelector('#record-button').innerText = 'Stop Recording';
+    document.querySelector('#record-button').innerText = 'stop recording';
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
             mediaRecorder = new MediaRecorder(stream);;
@@ -24,7 +24,7 @@ const startRecording = () => {
 
 const stopRecording = () => {
     console.log("stop recording!")
-    document.querySelector('#record-button').innerText = 'Record';
+    document.querySelector('#record-button').innerText = 'record';
     mediaRecorder.stop();
 };
 
@@ -53,8 +53,9 @@ document.getElementById('transcribe-button').addEventListener('click', function 
     if (!recordedAudioBlob) {
         console.error("No audio data to transcribe.");
     } else {
+        // Send the recorded audio data as a binary blob to the server for transcription
         const formData = new FormData();
-        formData.append('audio', recordedAudioBlob, 'audio.mp4'); // Set appropriate filename and MIME type
+        formData.append('audio', recordedAudioBlob, 'audio.mp4');
 
         fetch('/transcribe_audio', {
             method: 'POST',
@@ -65,14 +66,10 @@ document.getElementById('transcribe-button').addEventListener('click', function 
                 if (data.transcribed_text) {
                     console.log(data.transcribed_text)
                     const transcribedTextElement = document.getElementById('transcribed-text');
-                    const summarizedTextElement = document.getElementById('summarized-text');
                     const audioElement = document.getElementById('audio');
                     transcribedTextElement.innerHTML = ''; // Clear previous content
 
-                    console.log("Timestamps: ", data.timestamps);
-
                     data.timestamps.forEach((timestamp) => {
-                        console.log("Processing word: ", timestamp.text); // Debugging
                         const wordSpan = document.createElement('span');
                         wordSpan.textContent = timestamp.text + ' ';
                         wordSpan.dataset.startTime = timestamp.start;
@@ -100,7 +97,9 @@ document.getElementById('transcribe-button').addEventListener('click', function 
                         transcribedTextElement.appendChild(wordSpan);
                     });
 
-                    summarizedTextElement.textContent = 'Summary: ' + data.summarized_text
+                    document.getElementById('copy-button').style.display = 'inline-block';
+                    document.querySelector('.social-share-buttons').style.display = 'block';
+
                     audioElement.src = URL.createObjectURL(recordedAudioBlob);
                     audioElement.style.display = 'block';
                 } else if (data.error_message) {
@@ -115,8 +114,54 @@ document.getElementById('transcribe-button').addEventListener('click', function 
                 recordedAudioBlob = null;
             })
             .finally(() => {
+                // Hide spinner and enable button regardless of success or error
                 spinner.classList.add('d-none');
                 transcribeButton.removeAttribute('disabled');
             });
     }
+});
+
+document.getElementById('copy-button').addEventListener('click', () => {
+    const transcribedText = document.getElementById('transcribed-text').innerText;
+    try {
+      navigator.clipboard.writeText(transcribedText);
+      alert('Content copied to clipboard');
+    } catch (err) {
+      alert('Failed to copy: ', err);
+    }
+});
+
+// Function to share on Facebook
+document.getElementById('share-facebook').addEventListener('click', () => {
+    let textToShare = document.getElementById('transcribed-text').innerText;
+    let facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(textToShare)}`;
+    window.open(facebookUrl, '_blank');
+});
+
+// Function to share on Twitter
+document.getElementById('share-twitter').addEventListener('click', () => {
+    let textToShare = document.getElementById('transcribed-text').innerText;
+    let twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(textToShare)}`;
+    window.open(twitterUrl, '_blank');
+});
+
+// Function to share on LinkedIn
+document.getElementById('share-linkedin').addEventListener('click', () => {
+    let textToShare = document.getElementById('transcribed-text').innerText;
+    let linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(textToShare)}`;
+    window.open(linkedInUrl, '_blank');
+});
+
+document.getElementById('share-text').addEventListener('click', () => {
+    let textToShare = document.getElementById('transcribed-text').innerText;
+    let smsUrl = `sms:?&body=${encodeURIComponent(textToShare)}`;
+    window.open(smsUrl, '_blank');
+});
+
+document.getElementById('share-email').addEventListener('click', () => {
+    let textToShare = document.getElementById('transcribed-text').innerText;
+    let emailSubject = "transcribify transcribed this text for me!";
+    let emailBody = encodeURIComponent(textToShare);
+    let mailtoUrl = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${emailBody}`;
+    window.open(mailtoUrl, '_blank');
 });

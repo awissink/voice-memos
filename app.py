@@ -1,18 +1,22 @@
 from flask import Flask, request, render_template, jsonify
 import whisper_timestamped as whisper
-import openai
 import pprint
-import secret
 
 app = Flask(__name__)
 
-openai.api_key = secret.SECRET_KEY
-
-model = whisper.load_model("base")
+model = whisper.load_model("base.en")
 
 @app.route('/')
-def index():
+def home():
     return render_template('index.html')
+
+@app.route('/record')
+def record():
+    return render_template('record.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 @app.route('/transcribe_audio', methods=['POST'])
 def transcribe_audio():
@@ -24,10 +28,6 @@ def transcribe_audio():
         audio.write(audio_data)
         audio.close()
 
-
-        # Make a request to the Whisper API for transcription
-        # audio_file = open("backend/audios/audio.mp4", "rb")
-        # response = openai.Audio.transcribe("whisper-1", audio_file)
         response = whisper.transcribe(model, "backend/audios/audio.mp4", beam_size=5, best_of=5, temperature=(0.0, 0.2, 0.4, 0.6, 0.8, 1.0))
         pprint.pprint(response)
 
@@ -44,16 +44,8 @@ def transcribe_audio():
                 })
         print(timestamps)
 
-        # Obtain a summary of the text from OpenAI GPT
-        prompt = "Can you summarize this in bullet points: " + transcribed_text
-        summary = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
-            max_tokens=256)["choices"][0]["text"]
-
         return jsonify({'transcribed_text': transcribed_text,
-                        'timestamps': timestamps,
-                        'summarized_text': summary}), 200
+                        'timestamps': timestamps}), 200
     except Exception as e:
         print(f"Error processing audio: {str(e)}")
         return jsonify({'error_message': str(e)}), 500

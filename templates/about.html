@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>transcribify</title>
+    <title>about transcribify</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
@@ -32,10 +32,17 @@
             </ul>
         </div>
 </nav>
-    <div class="content">
-        <h1 class="main-headline" style="font-family: 'DM Serif Display', serif;">transcribify</h1>
-        <p>transcribe audio quickly and accurately</p>
-        <a href="/record" class="btn start-btn">Start Transcribing</a>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <h2 style="font-family: 'DM Serif Display', serif;">it all started with a class...</h2>
+                <p class="about-p-text">columbia student <strong>amelia wissink</strong> was in a web design studio class when she was tasked with creating a <strong>useful</strong> website using <strong>generative AI</strong>. she thought for weeks about something that could be useful for her classmates to no avail, until one of her friends said:</p>
+                <h2 style="font-family: 'DM Serif Display', serif;">"wow, I hate listening to voice memos."</h2>
+                <p class="about-p-text">a lightbulb went off, and <strong>transcribify</strong> was born!</p>
+            </div>
+            <div class="col-md-6">
+            </div>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
